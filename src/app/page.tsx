@@ -1,6 +1,6 @@
 import { ContentLayout } from '@/components/dashboard/content-layout'
 
-export default function Home() {
+export default function HomePage() {
   return (
     <ContentLayout title="Home page">
       <div className=""></div>
