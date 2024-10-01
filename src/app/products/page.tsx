@@ -2,7 +2,6 @@ import { ContentLayout } from '@/components/dashboard/content-layout'
 import { Card, CardHeader } from '@/components/ui/card'
 import { Product } from '@/zod'
 import { ProductsTable } from './components/products-table'
-import { columns } from './components/products-table/columns'
 
 async function getData(): Promise<Product[]> {
   // Fetch data from your API here.
@@ -32,7 +31,7 @@ export default async function ProductsPage() {
     <ContentLayout title="All Products">
       <Card className="w-full">
         <CardHeader></CardHeader>
-        <ProductsTable columns={columns} data={data} />
+        <ProductsTable data={data} />
       </Card>
     </ContentLayout>
   )
