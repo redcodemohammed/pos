@@ -55,11 +55,22 @@ export function getMenuList(pathname: string): Group[] {
           ]
         },
         {
-          href: '/categories',
+          href: '',
           label: 'Categories',
           active: pathname.includes('/categories'),
           icon: Bookmark,
-          submenus: []
+          submenus: [
+            {
+              href: '/categories',
+              label: 'All Categories',
+              active: pathname === '/categories'
+            },
+            {
+              href: '/categories/new',
+              label: 'New Category',
+              active: pathname === '/categories/new'
+            }
+          ]
         }
       ]
     },

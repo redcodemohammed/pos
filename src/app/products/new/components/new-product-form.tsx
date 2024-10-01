@@ -104,7 +104,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
         </Card>
 
         <div className="flex justify-start">
-          <Button type="submit">{mode === 'create' ? 'Add new item' : 'Save changes'}</Button>
+          <Button type="submit">{mode === 'create' ? 'Add new product' : 'Save changes'}</Button>
         </div>
       </form>
     </Form>

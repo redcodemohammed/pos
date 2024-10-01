@@ -5,7 +5,7 @@ import { NewProductForm } from './components/new-product-form'
 import { useSearchParams } from 'next/navigation'
 import { Product } from '@/zod'
 
-export default function ProductNewPage() {
+export default function ProductsNewPage() {
   const searchParams = useSearchParams()
   const edit = searchParams.get('edit')
 
