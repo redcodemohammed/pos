@@ -5,36 +5,23 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { type Product, ProductSchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
-const newItemFormSchema = z.object({
-  name: z
-    .string()
-    .min(3, 'Name must contain at least 3 letters')
-    .max(255, 'Name cannot container more than 255 letters'),
-  price: z.coerce
-    .number({ invalid_type_error: 'Price is required' })
-    .min(1, 'Price cannot be less than 1 IQD')
-    .max(1000000, 'Price cannot be more than 1000000 IQD'),
-  quantity: z.coerce
-    .number({ invalid_type_error: 'Quantity is required' })
-    .min(1, 'Quantity cannot be less than 1')
-    .max(1000, 'Quantity cannot be more than 1000'),
-  category: z.string().optional()
-})
+interface NewProductFormProps {
+  mode: 'create' | 'edit'
+  defaultData?: Product
+}
 
-export function NewItemForm() {
-  const form = useForm<z.infer<typeof newItemFormSchema>>({
-    resolver: zodResolver(newItemFormSchema),
-    defaultValues: {
-      name: ''
-    },
+export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
+  const form = useForm<Product>({
+    resolver: zodResolver(ProductSchema),
+    defaultValues: defaultData,
     shouldFocusError: true
   })
 
-  function onSubmit(values: z.infer<typeof newItemFormSchema>) {
+  function onSubmit(values: Product) {
     console.log(values)
   }
 
@@ -117,7 +104,7 @@ export function NewItemForm() {
         </Card>
 
         <div className="flex justify-start">
-          <Button type="submit">Add new item</Button>
+          <Button type="submit">{mode === 'create' ? 'Add new item' : 'Save changes'}</Button>
         </div>
       </form>
     </Form>
