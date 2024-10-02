@@ -1,5 +1,6 @@
 'use client'
 
+import { useAddProductMutation, useEditProductMutation } from '@/api/mutations'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -7,7 +8,9 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { type Product, ProductSchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CheckCircle, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 interface NewProductFormProps {
   mode: 'create' | 'edit'
@@ -21,8 +24,42 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
     shouldFocusError: true
   })
 
+  const { mutate: addProduct } = useAddProductMutation()
+  const { mutate: updateProduct } = useEditProductMutation()
+
   function onSubmit(values: Product) {
-    console.log(values)
+    const product: Omit<Product, 'id'> = {
+      name: values.name,
+      price: values.price,
+      quantity: values.quantity,
+      category: values.category
+    }
+    if (mode === 'create') {
+      addProduct(product, {
+        onSuccess() {
+          form.reset({ name: '', price: 0, quantity: 0, category: '' })
+          toast(`Product ${values.name} was added!`, { icon: <CheckCircle /> })
+        },
+        onError() {
+          toast('An error occurred while adding the product', { icon: <X /> })
+        }
+      })
+    } else {
+      updateProduct(
+        {
+          id: defaultData?.id as string,
+          product
+        },
+        {
+          onSuccess() {
+            toast(`Product ${values.name} was updated!`, { icon: <CheckCircle /> })
+          },
+          onError() {
+            toast('An error occurred while updating the product', { icon: <X /> })
+          }
+        }
+      )
+    }
   }
 
   return (

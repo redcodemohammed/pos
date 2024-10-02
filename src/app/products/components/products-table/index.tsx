@@ -5,13 +5,15 @@ import { Product } from '@/zod'
 import { useRouter } from 'next/navigation'
 
 interface ProductsTableProps {
-  data: Product[]
+  data?: Product[]
+  loading?: boolean
 }
 
-export function ProductsTable({ data }: ProductsTableProps) {
+export function ProductsTable({ data, loading }: ProductsTableProps) {
   const router = useRouter()
   return (
-    <ReusableTable<Product>
+    <ReusableTable
+      loading={loading}
       entity="product"
       data={data}
       onRowClick={(row) => router.push(`/products/new?edit=${row.id}`)}

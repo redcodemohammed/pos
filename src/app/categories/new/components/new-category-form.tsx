@@ -28,8 +28,8 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
   const { mutate: updateCategory } = useEditCategoryMutation()
 
   function onSubmit(values: Category) {
+    const category: Omit<Category, 'id'> = { name: values.name }
     if (mode === 'create') {
-      const category: Omit<Category, 'id'> = { name: values.name }
       addCategory(category, {
         onSuccess() {
           form.reset({ name: '' })
@@ -40,7 +40,6 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
         }
       })
     } else {
-      const category: Omit<Category, 'id'> = { name: values.name }
       updateCategory(
         { category, id: defaultData?.id as string },
         {

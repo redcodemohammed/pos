@@ -53,6 +53,27 @@ export function ReusableTable<E extends keyof typeof columns>({
                 </TableCell>
               ))}
             </TableRow>
+            <TableRow>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Skeleton className="h-[20px] rounded-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Skeleton className="h-[20px] rounded-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Skeleton className="h-[20px] rounded-full" />
+                </TableCell>
+              ))}
+            </TableRow>
           </TableBody>
         ) : (
           <TableBody>
