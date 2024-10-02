@@ -63,7 +63,7 @@ export function applyDirectFilter(value: unknown, filterValue: FilterValue): boo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function filter<T extends object>(items: T[], filters?: Filters): T[] {
+export function filter<T extends object>(items: T[], filters?: TypedFilters<T>): T[] {
   return items.filter((item) => {
     if (!filters || Object.keys(filters).length === 0) {
       return true // Return all products if no filters are applied
