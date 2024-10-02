@@ -12,7 +12,7 @@ export default function CategoriesPage() {
   return (
     <ContentLayout title="All Categories">
       <Card className="w-full">
-        <CardHeader></CardHeader>
+        <CardHeader>All Categories</CardHeader>
 
         <QueryStateDisplay
           error={error}

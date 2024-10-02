@@ -30,7 +30,7 @@ export default async function ProductsPage() {
   return (
     <ContentLayout title="All Products">
       <Card className="w-full">
-        <CardHeader></CardHeader>
+        <CardHeader>All products</CardHeader>
         <ProductsTable data={data} />
       </Card>
     </ContentLayout>
