@@ -1,18 +1,16 @@
 'use client'
 
 import { useAddCategoryMutation, useEditCategoryMutation } from '@/api/mutations'
-import { useProductsQuery } from '@/api/queries'
-import QueryStateDisplay from '@/components/query-state-display'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 import { Category, CategorySchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { ProductsList } from './products-list'
 
 interface NewCategoryFormProps {
   mode: 'create' | 'edit'
@@ -56,18 +54,6 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
     }
   }
 
-  const {
-    data: products,
-    isPending,
-    isSuccess,
-    isError,
-    error,
-    refetch
-  } = useProductsQuery({ category: { value: defaultData?.id, operator: 'eq' } })
-  function removeProductFromCategory(id: string) {
-    console.log(`removing ${id}`)
-  }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full md:max-w-sm space-y-6">
@@ -89,44 +75,10 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
             />
           </CardContent>
         </Card>
-
-        <Card>
-          <CardContent>
-            <CardTitle>Products</CardTitle>
-            <QueryStateDisplay
-              error={error}
-              isError={isError}
-              isLoading={isPending}
-              isSuccess={isSuccess}
-              refresh={refetch}
-              fallback={
-                <div className="space-y-4 mt-4">
-                  {products?.map((p, index) => (
-                    <div key={p.id}>
-                      <div className="flex items-center gap-2">
-                        <div>{index + 1}.</div>
-                        <div className="flex-1">{p.name}</div>
-                        <div className="">
-                          <Button
-                            type="button"
-                            variant={'ghost'}
-                            onClick={() => removeProductFromCategory(p.id as string)}>
-                            <X className="text-gray-400" size={16} />
-                          </Button>
-                        </div>
-                      </div>
-                      <Separator className="my-2" />
-                    </div>
-                  ))}
-                </div>
-              }
-            />
-          </CardContent>
-        </Card>
-
         <div className="flex justify-start">
           <Button type="submit">{mode === 'create' ? 'Add new category' : 'Save changes'}</Button>
         </div>
+        {mode === 'edit' && <ProductsList id={defaultData?.id as string} />}
       </form>
     </Form>
   )

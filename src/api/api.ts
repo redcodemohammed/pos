@@ -86,3 +86,8 @@ export function filter<T extends object>(items: T[], filters?: TypedFilters<T>):
     })
   })
 }
+
+export type TypedQueryOptions<T> = {
+  filters?: TypedFilters<T>
+  enabled?: boolean
+}

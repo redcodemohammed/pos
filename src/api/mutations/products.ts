@@ -31,7 +31,7 @@ export function useEditProductMutation() {
 
   return useMutation({
     mutationKey: [EDIT_PRODUCT_MUTATION_KEY],
-    mutationFn: ({ id, product }: { id: string; product: Readonly<Omit<Product, 'id'>> }) => {
+    mutationFn: ({ id, product }: { id: string; product: Readonly<Partial<Omit<Product, 'id'>>> }) => {
       return new Promise((resolve) => {
         resolve(updateProduct(id, product))
       })

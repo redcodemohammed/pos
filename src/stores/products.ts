@@ -5,7 +5,7 @@ type ProductsStore = {
   products: Product[]
   setProducts: (products: Product[]) => void
   addProduct: (product: Product) => void
-  updateProduct: (id: string, category: Product) => void
+  updateProduct: (id: string, category: Partial<Omit<Product, 'id'>>) => void
 }
 
 export const useProductsStore = create<ProductsStore>((set) => ({
@@ -18,6 +18,9 @@ export const useProductsStore = create<ProductsStore>((set) => ({
     }),
   updateProduct: (id, product) =>
     set((state) => ({
-      products: state.products.map((p) => (p.id === id ? product : p))
+      products: state.products.map((p) => {
+        if (p.id === id) return { ...p, ...product }
+        else return p
+      })
     }))
 }))
