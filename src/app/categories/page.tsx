@@ -1,7 +1,10 @@
+'use client'
+
 import { ContentLayout } from '@/components/dashboard/content-layout'
 import { Card, CardHeader } from '@/components/ui/card'
 import { CategoriesTable } from './components/categories-table'
 import { Category } from '@/zod'
+import { useCategoriesStore } from '@/stores/categories'
 
 async function getData(): Promise<Category[]> {
   return [
@@ -18,8 +21,9 @@ async function getData(): Promise<Category[]> {
   ]
 }
 
-export default async function CategoriesPage() {
-  const data = await getData()
+export default function CategoriesPage() {
+  // const data = await getData()
+  const data = useCategoriesStore((state) => state.categories)
 
   return (
     <ContentLayout title="All Categories">

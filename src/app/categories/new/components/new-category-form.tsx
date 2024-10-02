@@ -5,10 +5,12 @@ import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { useCategoriesStore } from '@/stores/categories'
 import { Category, CategorySchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { X } from 'lucide-react'
+import { CheckCircle, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 interface NewCategoryFormProps {
   mode: 'create' | 'edit'
@@ -22,8 +24,18 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
     shouldFocusError: true
   })
 
+  const categories = useCategoriesStore()
+
   function onSubmit(values: Category) {
-    console.log(values)
+    if (mode === 'create') {
+      const id = categories.categories.length + 1
+      const newCategory = { ...values, id: id.toString() }
+      categories.setCategories([...categories.categories, newCategory])
+      form.reset({ name: '' })
+      toast(`Category ${values.name} was added!`, { icon: <CheckCircle /> })
+    } else {
+      console.log('updating category')
+    }
   }
 
   function removeProductFromCategory(id: string) {

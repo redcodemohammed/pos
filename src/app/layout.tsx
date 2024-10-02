@@ -1,8 +1,11 @@
 import AdminPanelLayout from '@/components/dashboard/admin-panel-layout'
-import { ThemeProvider } from '@/components/theme-provider'
+import { ThemeProvider } from '@/components/providers/theme-provider'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Toaster } from '@/components/ui/sonner'
+
 import './globals.css'
+import { Providers } from '@/components/providers'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -28,9 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <Providers>
           <AdminPanelLayout>{children}</AdminPanelLayout>
-        </ThemeProvider>
+        </Providers>
+
+        <Toaster />
       </body>
     </html>
   )

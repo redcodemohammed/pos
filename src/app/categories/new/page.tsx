@@ -4,6 +4,7 @@ import { ContentLayout } from '@/components/dashboard/content-layout'
 import { Category } from '@/zod'
 import { useSearchParams } from 'next/navigation'
 import { NewCategoryForm } from './components/new-category-form'
+import { useCategoriesStore } from '@/stores/categories'
 
 export default function CategoriesNewPage() {
   const searchParams = useSearchParams()
@@ -11,13 +12,16 @@ export default function CategoriesNewPage() {
 
   let mode = 'create' as 'create' | 'edit'
   let defaults: Category | undefined
+
+  const data = useCategoriesStore((state) => state.categories)
+
   if (edit) {
     mode = 'edit'
-
-    defaults = {
-      id: '82fd4b7a',
-      name: 'Clothing'
-    }
+    data.find((category) => {
+      if (category.id === edit) {
+        defaults = category
+      }
+    })
   }
 
   return (
