@@ -57,7 +57,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
     } else {
       updateProduct(
         {
-          id: defaultData?.id as string,
+          id: defaultData?.id as Pick<Product, 'id'>,
           product
         },
         {

@@ -4,14 +4,11 @@ import QueryStateDisplay from '@/components/query-state-display'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { Category } from '@/zod'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
 
-interface ProductsListProps {
-  id: string
-}
-
-export function ProductsList({ id }: ProductsListProps) {
+export function ProductsList({ id }: Pick<Category, 'id'>) {
   const {
     data: products,
     isPending,
@@ -24,7 +21,7 @@ export function ProductsList({ id }: ProductsListProps) {
   })
 
   const { mutate: editProduct } = useEditProductMutation()
-  function removeProductFromCategory(id: string) {
+  function removeProductFromCategory(id: Pick<Category, 'id'>) {
     editProduct(
       {
         id,
@@ -61,7 +58,10 @@ export function ProductsList({ id }: ProductsListProps) {
                     <div>{index + 1}.</div>
                     <div className="flex-1">{p.name}</div>
                     <div className="">
-                      <Button type="button" variant={'ghost'} onClick={() => removeProductFromCategory(p.id as string)}>
+                      <Button
+                        type="button"
+                        variant={'ghost'}
+                        onClick={() => removeProductFromCategory(p.id as Pick<Category, 'id'>)}>
                         <X className="text-gray-400" size={16} />
                       </Button>
                     </div>
