@@ -1,6 +1,8 @@
 'use client'
 
 import { useAddCategoryMutation, useEditCategoryMutation } from '@/api/mutations'
+import { useProductsQuery } from '@/api/queries'
+import QueryStateDisplay from '@/components/query-state-display'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -54,6 +56,14 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
     }
   }
 
+  const {
+    data: products,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+    refetch
+  } = useProductsQuery({ category: { value: defaultData?.id, operator: 'eq' } })
   function removeProductFromCategory(id: string) {
     console.log(`removing ${id}`)
   }
@@ -83,20 +93,34 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
         <Card>
           <CardContent>
             <CardTitle>Products</CardTitle>
-            <div className="space-y-4 mt-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <div>1.</div>
-                  <div className="flex-1">Jeans</div>
-                  <div className="">
-                    <Button type="button" variant={'ghost'} onClick={() => removeProductFromCategory('82fd4b7a')}>
-                      <X className="text-gray-400" size={16} />
-                    </Button>
-                  </div>
+            <QueryStateDisplay
+              error={error}
+              isError={isError}
+              isLoading={isPending}
+              isSuccess={isSuccess}
+              refresh={refetch}
+              fallback={
+                <div className="space-y-4 mt-4">
+                  {products?.map((p, index) => (
+                    <div key={p.id}>
+                      <div className="flex items-center gap-2">
+                        <div>{index + 1}.</div>
+                        <div className="flex-1">{p.name}</div>
+                        <div className="">
+                          <Button
+                            type="button"
+                            variant={'ghost'}
+                            onClick={() => removeProductFromCategory(p.id as string)}>
+                            <X className="text-gray-400" size={16} />
+                          </Button>
+                        </div>
+                      </div>
+                      <Separator className="my-2" />
+                    </div>
+                  ))}
                 </div>
-                <Separator className="my-2" />
-              </div>
-            </div>
+              }
+            />
           </CardContent>
         </Card>
 
