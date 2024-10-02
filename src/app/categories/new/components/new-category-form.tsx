@@ -1,11 +1,11 @@
 'use client'
 
+import { useAddCategoryMutation, useEditCategoryMutation } from '@/api/mutations'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { useCategoriesStore } from '@/stores/categories'
 import { Category, CategorySchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
@@ -24,17 +24,34 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
     shouldFocusError: true
   })
 
-  const categories = useCategoriesStore()
+  const { mutate: addCategory } = useAddCategoryMutation()
+  const { mutate: updateCategory } = useEditCategoryMutation()
 
   function onSubmit(values: Category) {
     if (mode === 'create') {
-      const id = categories.categories.length + 1
-      const newCategory = { ...values, id: id.toString() }
-      categories.setCategories([...categories.categories, newCategory])
-      form.reset({ name: '' })
-      toast(`Category ${values.name} was added!`, { icon: <CheckCircle /> })
+      const category: Omit<Category, 'id'> = { name: values.name }
+      addCategory(category, {
+        onSuccess() {
+          form.reset({ name: '' })
+          toast(`Category ${values.name} was added!`, { icon: <CheckCircle /> })
+        },
+        onError() {
+          toast('An error occurred while adding the category', { icon: <X /> })
+        }
+      })
     } else {
-      console.log('updating category')
+      const category: Omit<Category, 'id'> = { name: values.name }
+      updateCategory(
+        { category, id: defaultData?.id as string },
+        {
+          onSuccess() {
+            toast(`Category ${values.name} was updated!`, { icon: <CheckCircle /> })
+          },
+          onError() {
+            toast('An error occurred while updating the category', { icon: <X /> })
+          }
+        }
+      )
     }
   }
 
