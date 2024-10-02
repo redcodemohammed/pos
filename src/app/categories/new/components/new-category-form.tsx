@@ -1,16 +1,18 @@
 'use client'
 
-import { useAddCategoryMutation, useEditCategoryMutation } from '@/api/mutations'
+import { useAddCategoryMutation, useDestroyCategoryMutation, useEditCategoryMutation } from '@/api/mutations'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Category, CategorySchema } from '@/zod'
+import { type Category, CategorySchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { ProductsList } from './products-list'
+import { confirmAction } from '@/lib/confirm-action'
+import { useRouter } from 'next/navigation'
 
 interface NewCategoryFormProps {
   mode: 'create' | 'edit'
@@ -26,6 +28,7 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
 
   const { mutate: addCategory } = useAddCategoryMutation()
   const { mutate: updateCategory } = useEditCategoryMutation()
+  const { mutate: destroyCategory } = useDestroyCategoryMutation()
 
   function onSubmit(values: Category) {
     const category: Omit<Category, 'id'> = { name: values.name }
@@ -41,7 +44,7 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
       })
     } else {
       updateCategory(
-        { category, id: defaultData?.id as string },
+        { category, id: defaultData?.id as Pick<Category, 'id'> },
         {
           onSuccess() {
             toast(`Category ${values.name} was updated!`, { icon: <CheckCircle /> })
@@ -52,6 +55,28 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
         }
       )
     }
+  }
+
+  const router = useRouter()
+  function destroy() {
+    confirmAction(
+      `Are you sure you want to remove the category ${defaultData?.name}?`,
+      {
+        label: 'Yes, remove',
+        onClick() {
+          destroyCategory(defaultData?.id as Pick<Category, 'id'>, {
+            onSuccess() {
+              toast(`Category ${defaultData?.name} was removed!`, { icon: <CheckCircle /> })
+              router.push('/categories')
+            },
+            onError() {
+              toast('An error occurred while removing the category', { icon: <X /> })
+            }
+          })
+        }
+      },
+      defaultData?.id
+    )
   }
 
   return (
@@ -75,8 +100,13 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
             />
           </CardContent>
         </Card>
-        <div className="flex justify-start">
+        <div className="flex justify-start gap-1">
           <Button type="submit">{mode === 'create' ? 'Add new category' : 'Save changes'}</Button>
+          {mode === 'edit' && (
+            <Button type="button" variant="destructive" onClick={destroy}>
+              Remove Category
+            </Button>
+          )}
         </div>
         {mode === 'edit' && <ProductsList id={defaultData?.id as string} />}
       </form>

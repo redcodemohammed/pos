@@ -1,6 +1,6 @@
 'use client'
 
-import { useAddProductMutation, useEditProductMutation } from '@/api/mutations'
+import { useAddProductMutation, useDestroyProductMutation, useEditProductMutation } from '@/api/mutations'
 import { useCategoriesQuery } from '@/api/queries'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -15,9 +15,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { confirmAction } from '@/lib/confirm-action'
 import { type Product, ProductSchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -35,6 +37,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
 
   const { mutate: addProduct } = useAddProductMutation()
   const { mutate: updateProduct } = useEditProductMutation()
+  const { mutate: destroyProduct } = useDestroyProductMutation()
   const { data: categories, isPending } = useCategoriesQuery()
 
   function onSubmit(values: Product) {
@@ -70,6 +73,28 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
         }
       )
     }
+  }
+
+  const router = useRouter()
+  function destroy() {
+    confirmAction(
+      `Are you sure you want to remove the product ${defaultData?.name}?`,
+      {
+        label: 'Yes, remove',
+        onClick() {
+          destroyProduct(defaultData?.id as Pick<Product, 'id'>, {
+            onSuccess() {
+              toast(`Product ${defaultData?.name} was removed!`, { icon: <CheckCircle /> })
+              router.push('/products')
+            },
+            onError() {
+              toast('An error occurred while removing the product', { icon: <X /> })
+            }
+          })
+        }
+      },
+      defaultData?.id
+    )
   }
 
   return (
@@ -165,8 +190,13 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
           </CardContent>
         </Card>
 
-        <div className="flex justify-start">
+        <div className="flex justify-start gap-1">
           <Button type="submit">{mode === 'create' ? 'Add new product' : 'Save changes'}</Button>
+          {mode === 'edit' && (
+            <Button type="button" variant="destructive" onClick={destroy}>
+              Remove Product
+            </Button>
+          )}
         </div>
       </form>
     </Form>
