@@ -5,6 +5,8 @@ import { Card, CardHeader } from '@/components/ui/card'
 import { ProductsTable } from './components/products-table'
 import { useProductsQuery } from '@/api/queries'
 import QueryStateDisplay from '@/components/query-state-display'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function ProductsPage() {
   const { isSuccess, data, isPending, isError, error, refetch } = useProductsQuery()
@@ -12,7 +14,14 @@ export default function ProductsPage() {
   return (
     <ContentLayout title="All Products">
       <Card className="w-full">
-        <CardHeader>All products</CardHeader>
+        <CardHeader className="flex-row items-center">
+          <div className="flex-1">All products</div>
+          <div className="">
+            <Link href="/products/new">
+              <Button>Add Product</Button>
+            </Link>
+          </div>
+        </CardHeader>
 
         <QueryStateDisplay
           error={error}
