@@ -1,11 +1,20 @@
 'use client'
 
 import { useAddProductMutation, useEditProductMutation } from '@/api/mutations'
+import { useCategoriesQuery } from '@/api/queries'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 import { type Product, ProductSchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
@@ -26,6 +35,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
 
   const { mutate: addProduct } = useAddProductMutation()
   const { mutate: updateProduct } = useEditProductMutation()
+  const { data: categories, isPending } = useCategoriesQuery()
 
   function onSubmit(values: Product) {
     const product: Omit<Product, 'id'> = {
@@ -127,7 +137,22 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent></SelectContent>
+                    <SelectContent>
+                      <SelectGroup>
+                        {isPending ? (
+                          <SelectLabel>Loading....</SelectLabel>
+                        ) : (
+                          <>
+                            <SelectLabel>Categories</SelectLabel>
+                            {categories?.map((category) => (
+                              <SelectItem key={category.id} value={category.id as string}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
                   </Select>
                   <FormDescription>
                     The category of the product helps you organize your products and make it easier for customers to
