@@ -12,7 +12,7 @@ import { Button } from '../ui/button'
 interface BulkAction<E> {
   label: string
   variant: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
-  action: (selectedRows: E) => void
+  action: (selectedRows: E[]) => void
 }
 
 interface ReusableTableProps<E extends keyof typeof columns> {
@@ -20,7 +20,7 @@ interface ReusableTableProps<E extends keyof typeof columns> {
   data?: EntityMap[E]
   onRowClick?: (row: EntityMap[E][number]) => void
   loading?: boolean
-  bulkActions?: BulkAction<EntityMap[E]>[]
+  bulkActions?: BulkAction<EntityMap[E][number]>[]
 }
 
 export function ReusableTable<E extends keyof typeof columns>({
@@ -61,103 +61,106 @@ export function ReusableTable<E extends keyof typeof columns>({
     onRowSelectionChange: setRowSelection,
     state: {
       rowSelection
-    }
+    },
+    filterFns: {}
   })
 
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
   return (
-    <div className="">
-      {selectedRows.length > 0 && bulkActions && (
-        <div className="bg-muted p-2 mb-2 flex items-center gap-2 justify-between">
-          <span>{selectedRows.length} row(s) selected</span>
-          {bulkActions?.map((action, index) => (
-            <Button
-              key={index}
-              variant={action.variant}
-              // @ts-expect-error - This is a hack to get around the fact that the type of selectedRows is not inferred
-              onClick={() => action.action(selectedRows.map((row) => row.original))}>
-              {action.label}
-            </Button>
-          ))}
-        </div>
-      )}
-      <div className="border-t">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          {loading ? (
-            <TableBody>
-              <TableRow>
-                {cols.map((col) => (
-                  <TableCell key={col.id}>
-                    <Skeleton className="h-[20px] rounded-full" />
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow>
-                {cols.map((col) => (
-                  <TableCell key={col.id}>
-                    <Skeleton className="h-[20px] rounded-full" />
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow>
-                {cols.map((col) => (
-                  <TableCell key={col.id}>
-                    <Skeleton className="h-[20px] rounded-full" />
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow>
-                {cols.map((col) => (
-                  <TableCell key={col.id}>
-                    <Skeleton className="h-[20px] rounded-full" />
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          ) : (
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow className="cursor-pointer" key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        className="py-3"
-                        key={cell.id}
-                        onClick={() => {
-                          if (cell.column.id !== 'select' && onRowClick) {
-                            onRowClick(row.original)
-                          }
-                        }}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={table.getAllColumns().length} className="h-[20px] text-center">
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+    <div className="border-t">
+      <Table>
+        <TableHeader>
+          {selectedRows.length > 0 && bulkActions && (
+            <TableRow>
+              <TableCell colSpan={table.getAllColumns().length}>
+                <div className="flex items-center gap-2 justify-between">
+                  <span>{selectedRows.length} row(s) selected</span>
+                  {bulkActions?.map((action, index) => (
+                    <Button
+                      key={index}
+                      variant={action.variant}
+                      onClick={() => action.action(selectedRows.map((row) => row.original))}>
+                      {action.label}
+                    </Button>
+                  ))}
+                </div>
+              </TableCell>
+            </TableRow>
           )}
-        </Table>
-      </div>
+
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                )
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        {loading ? (
+          <TableBody>
+            <TableRow>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Skeleton className="h-[20px] rounded-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Skeleton className="h-[20px] rounded-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Skeleton className="h-[20px] rounded-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              {cols.map((col) => (
+                <TableCell key={col.id}>
+                  <Skeleton className="h-[20px] rounded-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableBody>
+        ) : (
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow className="cursor-pointer" key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      className="py-3"
+                      key={cell.id}
+                      onClick={() => {
+                        if (cell.column.id !== 'select' && onRowClick) {
+                          onRowClick(row.original)
+                        }
+                      }}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={table.getAllColumns().length} className="h-[20px] text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        )}
+      </Table>
     </div>
   )
 }
