@@ -1,0 +1,1993 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a Point of sale Test server.",
+    "title": "Swagger Point of sale Test API",
+    "contact": {},
+    "version": "1.0"
+  },
+  "host": "localhost:6969",
+  "basePath": "/",
+  "paths": {
+    "/api/v1/carts": {
+      "get": {
+        "description": "Get all carts",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Get all carts",
+        "parameters": [
+          {
+            "type": "integer",
+            "default": 0,
+            "description": "Offset",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 25,
+            "description": "Limit",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CartResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new Cart",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Create a new Cart",
+        "parameters": [
+          {
+            "description": "Create Cart",
+            "name": "Cart",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.CartRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/responses.CartResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete multiple carts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Delete multiple carts",
+        "parameters": [
+          {
+            "description": "Array of IDs to delete",
+            "name": "ids",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple carts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Update multiple carts",
+        "parameters": [
+          {
+            "description": "Update carts",
+            "name": "carts",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.CartRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CartResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts/bulk": {
+      "post": {
+        "description": "Create new carts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Create new carts",
+        "parameters": [
+          {
+            "description": "Create carts",
+            "name": "carts",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.CartRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CartResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts/by-query": {
+      "delete": {
+        "description": "Delete multiple carts by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Delete multiple carts by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple carts by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Update multiple carts by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/carts/{id}": {
+      "get": {
+        "description": "Get a single Cart by its ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Get Cart by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.CartSingleResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific Cart by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Delete a Cart by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a specific Cart by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "carts"
+        ],
+        "summary": "Update Cart by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update Cart",
+            "name": "Cart",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.CartRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.CartResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cartsItems": {
+      "get": {
+        "description": "Get all cartsItems",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Get all cartsItems",
+        "parameters": [
+          {
+            "type": "integer",
+            "default": 0,
+            "description": "Offset",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 25,
+            "description": "Limit",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CartItemResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new CartItem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Create a new CartItem",
+        "parameters": [
+          {
+            "description": "Create CartItem",
+            "name": "CartItem",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.CartItemRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/responses.CartItemResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete multiple cartsItems",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Delete multiple cartsItems",
+        "parameters": [
+          {
+            "description": "Array of IDs to delete",
+            "name": "ids",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple cartsItems",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Update multiple cartsItems",
+        "parameters": [
+          {
+            "description": "Update cartsItems",
+            "name": "cartsItems",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.CartItemRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CartItemResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cartsItems/bulk": {
+      "post": {
+        "description": "Create new cartsItems",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Create new cartsItems",
+        "parameters": [
+          {
+            "description": "Create cartsItems",
+            "name": "cartsItems",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.CartItemRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CartItemResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cartsItems/by-query": {
+      "delete": {
+        "description": "Delete multiple cartsItems by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Delete multiple cartsItems by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple cartsItems by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Update multiple cartsItems by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/cartsItems/{id}": {
+      "get": {
+        "description": "Get a single CartItem by its ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Get CartItem by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.CartItemSingleResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific CartItem by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Delete a CartItem by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a specific CartItem by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "cartsItems"
+        ],
+        "summary": "Update CartItem by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update CartItem",
+            "name": "CartItem",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.CartItemRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.CartItemResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "description": "Get all categories",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Get all categories",
+        "parameters": [
+          {
+            "type": "integer",
+            "default": 0,
+            "description": "Offset",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 25,
+            "description": "Limit",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CategoryResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new Category",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Create a new Category",
+        "parameters": [
+          {
+            "description": "Create Category",
+            "name": "Category",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.CategoryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/responses.CategoryResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete multiple categories",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Delete multiple categories",
+        "parameters": [
+          {
+            "description": "Array of IDs to delete",
+            "name": "ids",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple categories",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Update multiple categories",
+        "parameters": [
+          {
+            "description": "Update categories",
+            "name": "categories",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.CategoryRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CategoryResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories/bulk": {
+      "post": {
+        "description": "Create new categories",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Create new categories",
+        "parameters": [
+          {
+            "description": "Create categories",
+            "name": "categories",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.CategoryRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.CategoryResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories/by-query": {
+      "delete": {
+        "description": "Delete multiple categories by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Delete multiple categories by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple categories by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Update multiple categories by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/{id}": {
+      "get": {
+        "description": "Get a single Category by its ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Get Category by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.CategorySingleResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific Category by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Delete a Category by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a specific Category by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "categories"
+        ],
+        "summary": "Update Category by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update Category",
+            "name": "Category",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.CategoryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.CategoryResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "description": "Get all products",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Get all products",
+        "parameters": [
+          {
+            "type": "integer",
+            "default": 0,
+            "description": "Offset",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 25,
+            "description": "Limit",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.ProductResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new Product",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Create a new Product",
+        "parameters": [
+          {
+            "description": "Create Product",
+            "name": "Product",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.ProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/responses.ProductResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete multiple products",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Delete multiple products",
+        "parameters": [
+          {
+            "description": "Array of IDs to delete",
+            "name": "ids",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple products",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Update multiple products",
+        "parameters": [
+          {
+            "description": "Update products",
+            "name": "products",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.ProductRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.ProductResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/bulk": {
+      "post": {
+        "description": "Create new products",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Create new products",
+        "parameters": [
+          {
+            "description": "Create products",
+            "name": "products",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.ProductRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.ProductResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/by-query": {
+      "delete": {
+        "description": "Delete multiple products by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Delete multiple products by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple products by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Update multiple products by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/products/{id}": {
+      "get": {
+        "description": "Get a single Product by its ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Get Product by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.ProductSingleResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific Product by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Delete a Product by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a specific Product by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "products"
+        ],
+        "summary": "Update Product by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update Product",
+            "name": "Product",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.ProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.ProductResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "description": "Get all users",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Get all users",
+        "parameters": [
+          {
+            "type": "integer",
+            "default": 0,
+            "description": "Offset",
+            "name": "offset",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "default": 25,
+            "description": "Limit",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.UserResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new User",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Create a new User",
+        "parameters": [
+          {
+            "description": "Create User",
+            "name": "User",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.UserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/responses.UserResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete multiple users",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete multiple users",
+        "parameters": [
+          {
+            "description": "Array of IDs to delete",
+            "name": "ids",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple users",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Update multiple users",
+        "parameters": [
+          {
+            "description": "Update users",
+            "name": "users",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.UserRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.UserResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/bulk": {
+      "post": {
+        "description": "Create new users",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Create new users",
+        "parameters": [
+          {
+            "description": "Create users",
+            "name": "users",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/requests.UserRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/responses.UserResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/by-query": {
+      "delete": {
+        "description": "Delete multiple users by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete multiple users by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update multiple users by query",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Update multiple users by query",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "description": "Get a single User by its ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Get User by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.UserSingleResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific User by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete a User by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "description": "Update a specific User by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Update User by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Some ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update User",
+            "name": "User",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.UserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/responses.UserResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "requests.CartItemRequest": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "integer"
+        },
+        "cost_price": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "images": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "product": {
+          "$ref": "#/definitions/requests.ProductRequest"
+        },
+        "product_id": {
+          "type": "integer"
+        },
+        "quantity": {
+          "type": "integer"
+        },
+        "sale_price": {
+          "type": "number"
+        }
+      }
+    },
+    "requests.CartRequest": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/requests.CartItemRequest"
+          }
+        },
+        "items_quantity": {
+          "type": "integer"
+        },
+        "total_amount": {
+          "type": "number"
+        },
+        "user_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "requests.CategoryRequest": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.ProductRequest": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "integer"
+        },
+        "cost_price": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sale_price": {
+          "type": "number"
+        }
+      }
+    },
+    "requests.UserRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "reference_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses.CartItemResponse": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "integer"
+        },
+        "cost_price": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "images": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "product": {
+          "$ref": "#/definitions/responses.ProductResponse"
+        },
+        "product_id": {
+          "type": "integer"
+        },
+        "quantity": {
+          "type": "integer"
+        },
+        "sale_price": {
+          "type": "number"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.CartItemSingleResponse": {
+      "type": "object",
+      "properties": {
+        "cart_id": {
+          "type": "integer"
+        },
+        "cost_price": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "images": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "product": {
+          "$ref": "#/definitions/responses.ProductResponse"
+        },
+        "product_id": {
+          "type": "integer"
+        },
+        "quantity": {
+          "type": "integer"
+        },
+        "sale_price": {
+          "type": "number"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.CartResponse": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.CartItemResponse"
+          }
+        },
+        "items_quantity": {
+          "type": "integer"
+        },
+        "total_amount": {
+          "type": "number"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses.CartSingleResponse": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.CartItemResponse"
+          }
+        },
+        "items_quantity": {
+          "type": "integer"
+        },
+        "total_amount": {
+          "type": "number"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses.CategoryResponse": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.CategorySingleResponse": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.ProductResponse": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "integer"
+        },
+        "cost_price": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sale_price": {
+          "type": "number"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.ProductSingleResponse": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "integer"
+        },
+        "cost_price": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sale_price": {
+          "type": "number"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.UserResponse": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "reference_id": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.UserSingleResponse": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "reference_id": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

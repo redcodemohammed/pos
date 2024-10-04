@@ -1,32 +1,31 @@
 'use client'
 
+import { useCategoryQuery } from '@/api/queries'
 import { ContentLayout } from '@/components/dashboard/content-layout'
-import { Category } from '@/zod'
+import QueryStateDisplay from '@/components/query-state-display'
 import { useSearchParams } from 'next/navigation'
 import { NewCategoryForm } from './components/new-category-form'
-import { useCategoriesStore } from '@/stores/categories'
 
 export default function CategoriesNewPage() {
   const searchParams = useSearchParams()
   const edit = searchParams.get('edit')
 
   let mode = 'create' as 'create' | 'edit'
-  let defaults: Category | undefined
-
-  const data = useCategoriesStore((state) => state.categories)
 
   if (edit) {
     mode = 'edit'
-    data.find((category) => {
-      if (category.id === edit) {
-        defaults = category
-      }
-    })
   }
+  const { error, isError, isPending, isSuccess, data } = useCategoryQuery(parseInt(edit!))
 
   return (
-    <ContentLayout title="Create Categories">
-      <NewCategoryForm mode={mode} defaultData={defaults} />
+    <ContentLayout title={mode === 'create' ? 'Create Category' : 'Edit Category'}>
+      <QueryStateDisplay
+        error={error}
+        isError={isError}
+        isLoading={isPending}
+        isSuccess={isSuccess}
+        fallback={<NewCategoryForm mode={mode} defaultData={data} />}
+      />
     </ContentLayout>
   )
 }

@@ -5,9 +5,8 @@ import { ColumnDef } from '@tanstack/react-table'
 // Reusing your column definitions
 export const product: ColumnDef<Product>[] = [
   { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'price', header: 'Price' },
-  { accessorKey: 'quantity', header: 'Quantity' },
-  { accessorKey: 'category', header: 'Category' }
+  { accessorKey: 'cost_price', header: 'Cost Price' },
+  { accessorKey: 'sale_price', header: 'Sale Price' }
 ]
 
 export const category: ColumnDef<Category>[] = [{ accessorKey: 'name', header: 'Name' }]

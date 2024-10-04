@@ -1,5 +1,7 @@
 import { ofetch } from 'ofetch'
-export const api = ofetch
+
+const apiURL = process.env.NEXT_PUBLIC_API_BASE_URL_V1
+export const api = ofetch.create({ baseURL: apiURL })
 
 // Basic value types that can be used in filters
 export type FilterValue = string | number | boolean | null | undefined

@@ -20,6 +20,7 @@ import { type Product, ProductSchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -35,6 +36,10 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
     shouldFocusError: true
   })
 
+  useEffect(() => {
+    form.reset(defaultData)
+  }, [defaultData, form])
+
   const { mutate: addProduct } = useAddProductMutation()
   const { mutate: updateProduct } = useEditProductMutation()
   const { mutate: destroyProduct } = useDestroyProductMutation()
@@ -43,15 +48,23 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
   function onSubmit(values: Product) {
     const product: Omit<Product, 'id'> = {
       name: values.name,
-      price: values.price,
-      quantity: values.quantity,
-      category: values.category
+      category_id: values.category_id,
+      cost_price: values.cost_price,
+      sale_price: values.sale_price
     }
     if (mode === 'create') {
       addProduct(product, {
         onSuccess() {
-          form.reset({ name: '', price: 0, quantity: 0, category: '' })
-          toast(`Product ${values.name} was added!`, { icon: <CheckCircle /> })
+          form.reset({ name: '', sale_price: 0, cost_price: 0, category_id: undefined })
+          toast(`Product ${values.name} was added!`, {
+            icon: <CheckCircle />,
+            action: {
+              label: 'View all products',
+              onClick() {
+                router.push('/products')
+              }
+            }
+          })
         },
         onError() {
           toast('An error occurred while adding the product', { icon: <X /> })
@@ -93,7 +106,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
           })
         }
       },
-      defaultData?.id
+      defaultData?.id?.toString()
     )
   }
 
@@ -119,28 +132,30 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
 
             <FormField
               control={form.control}
-              name="price"
+              name="cost_price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price (IQD)</FormLabel>
+                  <FormLabel>Cost Price (IQD)</FormLabel>
                   <FormControl>
                     <Input placeholder="0.000" {...field} prefix="dsd" type="number" />
                   </FormControl>
+                  <FormDescription>The cost price is the price that you paid for the product.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="quantity"
+              name="sale_price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Quantity</FormLabel>
+                  <FormLabel>Sale Price (IQD)</FormLabel>
                   <FormControl>
-                    <Input placeholder="0" {...field} prefix="dsd" type="number" />
+                    <Input placeholder="0.000" {...field} prefix="dsd" type="number" />
                   </FormControl>
-                  <FormDescription>The quantity of the product you have in stock.</FormDescription>
+                  <FormDescription>
+                    The sale price is the price that the customer will pay for the product.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -152,11 +167,11 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
           <CardContent>
             <FormField
               control={form.control}
-              name="category"
+              name="category_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value?.toString()}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue />
@@ -170,7 +185,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
                           <>
                             <SelectLabel>Categories</SelectLabel>
                             {categories?.map((category) => (
-                              <SelectItem key={category.id} value={category.id as string}>
+                              <SelectItem key={category.id} value={category.id?.toString() as string}>
                                 {category.name}
                               </SelectItem>
                             ))}

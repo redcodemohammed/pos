@@ -1,17 +1,19 @@
-import { useCategoriesStore } from '@/stores/categories'
-import { Category } from '@/zod'
 import { useQuery } from '@tanstack/react-query'
-import { filter, TypedFilters } from '../api'
+import { categoriesRepository } from '../repositories'
 
 export const CATEGORIES_QUERY_KEY = 'CATEGORIES_QUERY_KEY'
 
-export function useCategoriesQuery(filters?: TypedFilters<Category>) {
-  const categories = useCategoriesStore((state) => state.categories)
-
+export function useCategoriesQuery(offset = 0, limit = 10) {
   return useQuery({
-    queryKey: [CATEGORIES_QUERY_KEY],
-    queryFn() {
-      return filter(categories, filters)
-    }
+    queryKey: [CATEGORIES_QUERY_KEY, offset, limit],
+    queryFn: () => categoriesRepository.getAll(offset, limit)
+  })
+}
+
+export function useCategoryQuery(id: number) {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [CATEGORIES_QUERY_KEY, id],
+    queryFn: () => categoriesRepository.get(id)
   })
 }

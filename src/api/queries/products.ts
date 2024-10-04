@@ -1,19 +1,19 @@
-import { useProductsStore } from '@/stores/products'
-import { Product } from '@/zod'
 import { useQuery } from '@tanstack/react-query'
-import { filter, TypedQueryOptions } from '../api'
+import { productsRepository } from '../repositories'
 
 export const PRODUCTS_QUERY_KEY = 'PRODUCTS_QUERY_KEY'
 
-export function useProductsQuery(options?: TypedQueryOptions<Product>) {
-  const products = useProductsStore((state) => state.products)
-
+export function useProductsQuery(offset = 0, limit = 10) {
   return useQuery({
-    enabled: options?.enabled,
-    queryKey: [PRODUCTS_QUERY_KEY],
-    queryFn: () => {
-      // Apply filters to products
-      return filter(products, options?.filters)
-    }
+    queryKey: [PRODUCTS_QUERY_KEY, offset, limit],
+    queryFn: () => productsRepository.getAll(offset, limit)
+  })
+}
+
+export function useProductQuery(id: number) {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [PRODUCTS_QUERY_KEY, id],
+    queryFn: () => productsRepository.get(id)
   })
 }

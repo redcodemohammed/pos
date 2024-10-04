@@ -1,6 +1,6 @@
 'use client'
 
-import { useAddCategoryMutation, useDestroyCategoryMutation, useEditCategoryMutation } from '@/api/mutations'
+import { useAddCategoryMutation, useDestroyCategoryMutation, useUpdateCategoryMutation } from '@/api/mutations'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -10,9 +10,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { ProductsList } from './products-list'
 import { confirmAction } from '@/lib/confirm-action'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 interface NewCategoryFormProps {
   mode: 'create' | 'edit'
@@ -26,8 +26,12 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
     shouldFocusError: true
   })
 
+  useEffect(() => {
+    form.reset(defaultData)
+  }, [form, defaultData])
+
   const { mutate: addCategory } = useAddCategoryMutation()
-  const { mutate: updateCategory } = useEditCategoryMutation()
+  const { mutate: updateCategory } = useUpdateCategoryMutation()
   const { mutate: destroyCategory } = useDestroyCategoryMutation()
 
   function onSubmit(values: Category) {
@@ -75,7 +79,7 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
           })
         }
       },
-      defaultData?.id
+      defaultData?.id?.toString()
     )
   }
 
@@ -108,7 +112,6 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
             </Button>
           )}
         </div>
-        {mode === 'edit' && <ProductsList id={defaultData?.id as string} />}
       </form>
     </Form>
   )
