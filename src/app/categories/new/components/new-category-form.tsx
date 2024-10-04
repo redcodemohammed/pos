@@ -5,14 +5,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { confirmAction } from '@/lib/confirm-action'
 import { type Category, CategorySchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckCircle, X } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { confirmAction } from '@/lib/confirm-action'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 interface NewCategoryFormProps {
   mode: 'create' | 'edit'
@@ -40,10 +39,10 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
       addCategory(category, {
         onSuccess() {
           form.reset({ name: '' })
-          toast(`Category ${values.name} was added!`, { icon: <CheckCircle /> })
+          toast.success(`Category ${values.name} was added!`)
         },
         onError() {
-          toast('An error occurred while adding the category', { icon: <X /> })
+          toast.error('An error occurred while adding the category')
         }
       })
     } else {
@@ -51,10 +50,10 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
         { category, id: defaultData?.id as Pick<Category, 'id'> },
         {
           onSuccess() {
-            toast(`Category ${values.name} was updated!`, { icon: <CheckCircle /> })
+            toast.success(`Category ${values.name} was updated!`)
           },
           onError() {
-            toast('An error occurred while updating the category', { icon: <X /> })
+            toast.error('An error occurred while updating the category')
           }
         }
       )
@@ -70,11 +69,11 @@ export function NewCategoryForm({ mode, defaultData }: NewCategoryFormProps) {
         onClick() {
           destroyCategory(defaultData?.id as Pick<Category, 'id'>, {
             onSuccess() {
-              toast(`Category ${defaultData?.name} was removed!`, { icon: <CheckCircle /> })
+              toast.success(`Category ${defaultData?.name} was removed!`)
               router.push('/categories')
             },
             onError() {
-              toast('An error occurred while removing the category', { icon: <X /> })
+              toast.error('An error occurred while removing the category')
             }
           })
         }

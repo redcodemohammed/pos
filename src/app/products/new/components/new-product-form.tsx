@@ -18,7 +18,6 @@ import {
 import { confirmAction } from '@/lib/confirm-action'
 import { type Product, ProductSchema } from '@/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckCircle, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -56,8 +55,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
       addProduct(product, {
         onSuccess() {
           form.reset({ name: '', sale_price: 0, cost_price: 0, category_id: undefined })
-          toast(`Product ${values.name} was added!`, {
-            icon: <CheckCircle />,
+          toast.success(`Product ${values.name} was added!`, {
             action: {
               label: 'View all products',
               onClick() {
@@ -67,7 +65,7 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
           })
         },
         onError() {
-          toast('An error occurred while adding the product', { icon: <X /> })
+          toast.error('An error occurred while adding the product')
         }
       })
     } else {
@@ -78,10 +76,10 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
         },
         {
           onSuccess() {
-            toast(`Product ${values.name} was updated!`, { icon: <CheckCircle /> })
+            toast.success(`Product ${values.name} was updated!`)
           },
           onError() {
-            toast('An error occurred while updating the product', { icon: <X /> })
+            toast.error('An error occurred while updating the product')
           }
         }
       )
@@ -97,11 +95,11 @@ export function NewProductForm({ mode, defaultData }: NewProductFormProps) {
         onClick() {
           destroyProduct(defaultData?.id as Pick<Product, 'id'>, {
             onSuccess() {
-              toast(`Product ${defaultData?.name} was removed!`, { icon: <CheckCircle /> })
+              toast.success(`Product ${defaultData?.name} was removed!`)
               router.push('/products')
             },
             onError() {
-              toast('An error occurred while removing the product', { icon: <X /> })
+              toast.error('An error occurred while removing the product')
             }
           })
         }
