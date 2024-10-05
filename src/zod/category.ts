@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 export const CategorySchema = z.object({
-  id: z.number().optional(),
   name: z
     .string()
     .min(3, 'Name must contain at least 3 letters')
@@ -9,3 +8,4 @@ export const CategorySchema = z.object({
 })
 
 export type Category = z.infer<typeof CategorySchema>
+export type CategoryEntity = { id: number } & Category
