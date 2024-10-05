@@ -1,12 +1,12 @@
 'use client'
 
 import { ReusableTable } from '@/components/tables'
-import { Product } from '@/zod'
+import { ProductEntity } from '@/zod'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 interface ProductsTableProps {
-  data?: Product[]
+  data?: ProductEntity[]
   loading?: boolean
 }
 

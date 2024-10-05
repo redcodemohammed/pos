@@ -1,11 +1,11 @@
 'use client'
 
 import { ReusableTable } from '@/components/tables'
-import { Category } from '@/zod'
+import { CategoryEntity } from '@/zod'
 import { useRouter } from 'next/navigation'
 
 interface CategoriesTableProps {
-  data?: Category[]
+  data?: CategoryEntity[]
   loading?: boolean
 }
 
